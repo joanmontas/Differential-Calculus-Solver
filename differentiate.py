@@ -36,6 +36,7 @@ class numberAST(Ast):
         if not isinstance(val0, int) and not isinstance(val0, float):
             raise TypeError("Error: numberAst expects an int as argumnt")
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return str(self.value0)
@@ -52,6 +53,7 @@ class sinAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"sin({self.value0.__str__()})"
@@ -73,6 +75,7 @@ class cosAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"cos({self.value0.__str__()})"
@@ -94,6 +97,7 @@ class tanAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"tan({self.value0.__str__()})"
@@ -115,6 +119,7 @@ class sec2AST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"sec2({self.value0.__str__()})"
@@ -138,6 +143,7 @@ class secAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"sec({self.value0.__str__()})"
@@ -159,6 +165,7 @@ class cscAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"csc({self.value0.__str__()})"
@@ -180,6 +187,7 @@ class cotAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"cot({self.value0.__str__()})"
@@ -201,6 +209,7 @@ class csc2AST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"csc2({self.value0.__str__()})"
@@ -225,6 +234,7 @@ class arcsinAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"sin^-1({self.value0.__str__()})"
@@ -252,6 +262,7 @@ class arccosineAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"cos^-1({self.value0.__str__()})"
@@ -281,6 +292,7 @@ class arctanAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"tan^-1({self.value0.__str__()})"
@@ -304,6 +316,7 @@ class naturalLogAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"ln({self.value0.__str__()})"
@@ -326,6 +339,7 @@ class negativeAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0
+        self.value1 = None
 
     def __str__(self):
         return f"(-({self.value0.__str__()}))"
@@ -343,6 +357,7 @@ class variableAST(Ast):
 
     def __init__(self, val0):
         self.value0 = val0  # like x, y,...
+        self.value1 = None
 
     def __str__(self):
         return str(self.value0)
@@ -438,7 +453,8 @@ class eulerAST(Ast):
     nodeType = "euler"
 
     def __init__(self):
-        self.nodeType = "euler"
+        self.value0 = None
+        self.value1 = None
 
     def __str__(self):
         return "e"
@@ -469,6 +485,8 @@ class powAST(Ast):
             n = self.value1.value0
             if isinstance(self.value0, variableAST):
                 return multAST(numberAST(n), powAST(self.value0, numberAST(n - 1)))
+            elif isinstance(self.value0, eulerAST):
+                return self
             else:
                 return _chainRule(self)
         else:
@@ -575,3 +593,16 @@ def _chainRule(f):
         raise NotImplementedError(
             "Error: _chain rule is unable to acess this type's function g"
         )
+
+
+def isAlgebraic(n):
+    if not (isinstance(n, Ast)):
+        return False
+    if isinstance(n, variableAST):
+        return True
+    if isAlgebraic(n.value0):
+        return True
+    if isAlgebraic(n.value1):
+        return True
+
+    return False

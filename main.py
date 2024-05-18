@@ -56,4 +56,9 @@ if __name__ == "__main__":
     # print(arcsin_xPow3._diff())
     # print(arccos_xPow3._diff())
     # print(arctan_xPow3._diff())
-    print(ln_xPow3._diff())
+    # print(ln_xPow3._diff())
+    # print(f"The derivative of {divAST(numberAST(6), powAST(powAST(variableAST('z'), numberAST(3)), numberAST(0.5)))} is: ")
+    # print(divAST(numberAST(6), powAST(powAST(variableAST("z"), numberAST(3)), numberAST(0.5)))._diff())
+    # print(isAlgebraic(multAST(numb3, variableX)))
+    print(isAlgebraic(eulerAST()))
+    pass
