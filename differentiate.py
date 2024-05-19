@@ -481,29 +481,50 @@ class powAST(Ast):
 
     def _diff(self):
         # NOTE(Joan) Power rule - Joan
-        if isinstance(self.value1, numberAST):
-            n = self.value1.value0
-            if isinstance(self.value0, variableAST):
-                return multAST(numberAST(n), powAST(self.value0, numberAST(n - 1)))
-            elif isinstance(self.value0, eulerAST):
-                return self
+        if not isAlgebraic(self.value0):
+            if isinstance(self.value0, eulerAST):
+                if isinstance(self.value1, variableAST):
+                    return self
+                else:
+                    return _chainRule(self)  # account for e^alg
             else:
-                return _chainRule(self)
+                if isAlgebraic(self.value1):
+                    if isinstance(self.value1, variableAST):
+                        return multAST(
+                            powAST(self.value0, self.value1), naturalLogAST(self.value0)
+                        )
+                    else:
+                        return _chainRule(self)  # account for non-alg ^ alg
+                else:
+                    return self  # account for non-alg ^ non-alg
+            pass
         else:
-            raise NotImplementedError(
-                "Error: _chain rule is unable to acess this type's function g"
-            )
-        # TODO(Joan) acount of const^x - Joan
-        # NOTE(Joan) x, could be a function itself, thus requires chain rule
-
-        # TODO(Joan) acount of e^x - Joan
-        # NOTE(Joan) x, could be a function itself, thus requires chain rule
+            if isAlgebraic(self.value1):
+                fPrime = self.value0._diff()
+                gPrime = self.value1._diff()
+                return multAST(
+                    powAST(self.value0, self.value1),
+                    addAST(
+                        divAST(multAST(self.value1, fPrime), self.value0),
+                        multAST(naturalLogAST(self.value0), gPrime),
+                    ),
+                )  # alg ^alg
+            else:
+                if isinstance(self.value0, variableAST):
+                    return multAST(
+                        self.value1,
+                        powAST(self.value0, subAST(self.value1, numberAST(1))),
+                    )
+                else:
+                    return _chainRule(self)  # alg ^ non-alg
+        raise NotImplementedError("Error: powAST condition not accounted for")
 
 
 # NOTE (Joan) Could simply implement this function inside the class - Joan
 # NOTE (Joan) Or simply abstract functions with single variable and double variable and group them - Joan
 def _chainRule(f):
     if isinstance(f, powAST):
+        # TODO(Joan) account for all power condition - Joan
         g = f.value0
         gPrime = g._diff()
         fPrime = powAST(variableAST(variableConstant), f.value1)._diff()
