@@ -517,7 +517,9 @@ class powAST(Ast):
                     )
                 else:
                     return _chainRule(self)  # alg ^ non-alg
-        raise NotImplementedError("Error: powAST condition not accounted for")
+        raise NotImplementedError(
+            "Error: powAST condition not accounted for"
+        )
 
 
 # NOTE (Joan) Could simply implement this function inside the class - Joan
@@ -525,11 +527,33 @@ class powAST(Ast):
 def _chainRule(f):
     if isinstance(f, powAST):
         # TODO(Joan) account for all power condition - Joan
-        g = f.value0
-        gPrime = g._diff()
-        fPrime = powAST(variableAST(variableConstant), f.value1)._diff()
-        fPrime.value1.value0 = g
-        return multAST(fPrime, gPrime)
+
+        if not isAlgebraic(f.value0):
+            if isinstance(f.value0, eulerAST):
+                # account for e^alg
+                g = f.value1
+                gPrime = g._diff()
+                fPrime = powAST(eulerAST(), variableAST(variableConstant))._diff()
+                fPrime.value1 = g
+                return multAST(fPrime, gPrime)
+            else:
+                if isAlgebraic(f.value1):
+                    # account for non-alg ^ alg
+                    g = f.value1
+                    gPrime = g._diff()
+                    fPrime = powAST(f.value0, variableAST(variableConstant))._diff()
+                    fPrime.value0.value1 = g
+                    return multAST(fPrime, gPrime)
+        else:
+            if isAlgebraic(f.value1):
+                # TODO(Joan) Complete perhaps with Logarithmic differentiation
+                return # alg ^alg
+            else:
+                g = f.value0
+                gPrime = g._diff()
+                fPrime = powAST(variableAST(variableConstant), f.value1)._diff()
+                fPrime.value1.value0 = g
+                return multAST(fPrime, gPrime)# alg ^ non-alg
     elif isinstance(f, sinAST):
         g = f.value0
         gPrime = g._diff()
@@ -609,7 +633,6 @@ def _chainRule(f):
         fPrime = naturalLogAST(variableAST(variableConstant))._diff()
         fPrime.value1 = g
         return multAST(fPrime, gPrime)
-    # TODO(Joan) a^x, e^x - Joan
     else:
         raise NotImplementedError(
             "Error: _chain rule is unable to acess this type's function g"

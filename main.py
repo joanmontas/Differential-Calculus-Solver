@@ -61,5 +61,7 @@ if __name__ == "__main__":
     # print(divAST(numberAST(6), powAST(powAST(variableAST("z"), numberAST(3)), numberAST(0.5)))._diff())
     # print(isAlgebraic(multAST(numb3, variableX)))
     # print(isAlgebraic(eulerAST()))
-    print(divAST(numb3, powAST(variableX, numb3))._diff())
+    # print(divAST(numb3, powAST(variableX, numb3))._diff())
+    # print(powAST(eulerAST(), x_pow_3)._diff())
+    print(powAST(numb3, x_pow_3)._diff())
     pass
