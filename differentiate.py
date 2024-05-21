@@ -175,7 +175,8 @@ class cscAST(Ast):
 
     def _diff(self):
         if self.value0.__type__() == "variable":
-            return multAST(negativeAST(cscAST(self.value0)), cotAST(self.value0))
+            # return multAST(negativeAST(cscAST(self.value0)), cotAST(self.value0))
+            return negativeAST(multAST(cscAST(self.value0), cotAST(self.value0)))
         elif self.value0.__type__() == "number":
             return self
         else:
@@ -229,8 +230,8 @@ class csc2AST(Ast):
             return _chainRule(self)
 
 
-class arcsinAST(Ast):
-    nodeType = "arcsin"
+class arcsineAST(Ast):
+    nodeType = "arcsine"
 
     def __init__(self, val0):
         self.value0 = val0
@@ -366,7 +367,7 @@ class variableAST(Ast):
         return self.nodeType
 
     def _diff(self):
-        return numberAST(0)
+        return numberAST(1)
 
 
 class addAST(Ast):
@@ -421,6 +422,11 @@ class multAST(Ast):
         return self.nodeType
 
     def _diff(self):
+        # NOTE(Joan) Could in theory check if being multiply by a non algebraic expression - Joan
+        # NOTE(Joan) This way can simply return multAst(non-alg, alg_prime) and vice versa - Joan
+        # NOTE(Joan) However, the property of d/dx(c) where c is a non-algebraic constant - Joan
+        # NOTE(Joan) Equals 0 and the multiplicative property of derivative will handle it - Joan
+        # NOTE(Joan) This is more verbose (in terms of differentiation) but just as correct - Joan
         left = self.value0._diff()
         right = self.value1._diff()
         print(left, right, self.value0, self.value1)
@@ -517,9 +523,7 @@ class powAST(Ast):
                     )
                 else:
                     return _chainRule(self)  # alg ^ non-alg
-        raise NotImplementedError(
-            "Error: powAST condition not accounted for"
-        )
+        raise NotImplementedError("Error: powAST condition not accounted for")
 
 
 # NOTE (Joan) Could simply implement this function inside the class - Joan
@@ -545,15 +549,13 @@ def _chainRule(f):
                     fPrime.value0.value1 = g
                     return multAST(fPrime, gPrime)
         else:
-            if isAlgebraic(f.value1):
-                # TODO(Joan) Complete perhaps with Logarithmic differentiation
-                return # alg ^alg
-            else:
+            # NOTE(Joan )alg ^ alg should never be reached. Logarithmic Differetiation is accounted at powAst._diff() - Joan
+            if not isAlgebraic(f.value1):
                 g = f.value0
                 gPrime = g._diff()
                 fPrime = powAST(variableAST(variableConstant), f.value1)._diff()
                 fPrime.value1.value0 = g
-                return multAST(fPrime, gPrime)# alg ^ non-alg
+                return multAST(fPrime, gPrime)  # alg ^ non-alg
     elif isinstance(f, sinAST):
         g = f.value0
         gPrime = g._diff()
@@ -608,10 +610,10 @@ def _chainRule(f):
         fPrime.value1.value0.value0 = g
         fPrime.value1.value1.value0 = g
         return multAST(fPrime, gPrime)
-    elif isinstance(f, arcsinAST):
+    elif isinstance(f, arcsineAST):
         g = f.value0
         gPrime = g._diff()
-        fPrime = arcsinAST(variableAST(variableConstant))._diff()
+        fPrime = arcsineAST(variableAST(variableConstant))._diff()
         fPrime.value1.value0.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, arccosineAST):
