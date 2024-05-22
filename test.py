@@ -163,6 +163,131 @@ class plainTrigonometricDifferentiation(unittest.TestCase):
         self.assertTrue(isinstance(arctanX_prime.value1.value1.value1, numberAST))
         self.assertEqual(arctanX_prime.value1.value1.value1.value0, 2)
 
+    def test_sec2X(self):
+        sec2X = sec2AST(self.variableX)
+        sec2X_prime = sec2X._diff()
+
+        self.assertTrue(isinstance(sec2X_prime, multAST))
+        self.assertTrue(isinstance(sec2X_prime.value0, numberAST))
+        self.assertEqual(sec2X_prime.value0.value0, 2)
+
+        self.assertTrue(isinstance(sec2X_prime.value1, multAST))
+        self.assertTrue(isinstance(sec2X_prime.value1.value0, sec2AST))
+        self.assertTrue(isinstance(sec2X_prime.value1.value0.value0, variableAST))
+        self.assertEqual(sec2X_prime.value1.value0.value0.value0, "x")
+
+        self.assertTrue(isinstance(sec2X_prime.value1.value1, tanAST))
+        self.assertTrue(isinstance(sec2X_prime.value1.value1.value0, variableAST))
+        self.assertEqual(sec2X_prime.value1.value1.value0.value0, "x")
+
+    def test_csc2X(self):
+        csc2X = csc2AST(self.variableX)
+        csc2X_prime = csc2X._diff()
+
+        self.assertTrue(isinstance(csc2X_prime, negativeAST))
+        self.assertTrue(isinstance(csc2X_prime.value0, multAST))
+
+        self.assertTrue(isinstance(csc2X_prime.value0.value0, numberAST))
+        self.assertEqual(csc2X_prime.value0.value0.value0, 2)
+
+        self.assertTrue(isinstance(csc2X_prime.value0.value1, multAST))
+
+        self.assertTrue(isinstance(csc2X_prime.value0.value1.value0, csc2AST))
+        self.assertTrue(
+            isinstance(csc2X_prime.value0.value1.value0.value0, variableAST)
+        )
+        self.assertEqual(
+            csc2X_prime.value0.value1.value0.value0.value0, self.variableConstant
+        )
+
+        self.assertTrue(isinstance(csc2X_prime.value0.value1.value1, cotAST))
+        self.assertTrue(
+            isinstance(csc2X_prime.value0.value1.value1.value0, variableAST)
+        )
+        self.assertEqual(
+            csc2X_prime.value0.value1.value1.value0.value0, self.variableConstant
+        )
+
+
+class plainEulerDifferentiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_eulerX(self):
+        eulerX = powAST(eulerAST(), self.variableX)
+        eulerX_prime = eulerX._diff()
+
+        self.assertTrue(isinstance(eulerX_prime, powAST))
+
+        self.assertTrue(isinstance(eulerX_prime.value0, eulerAST))
+
+        self.assertTrue(isinstance(eulerX_prime.value1, variableAST))
+        self.assertEqual(eulerX_prime.value1.value0, "x")
+
+
+class plainNaturalLogDifferentiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_lnX(self):
+        lnX = naturalLogAST(self.variableX)
+        lnX_prime = lnX._diff()
+
+        self.assertTrue(isinstance(lnX_prime, divAST))
+
+        self.assertTrue(isinstance(lnX_prime.value0, numberAST))
+        self.assertEqual(lnX_prime.value0.value0, 1)
+
+        self.assertTrue(isinstance(lnX_prime.value1, variableAST))
+        self.assertEqual(lnX_prime.value1.value0, "x")
+
+
+class plainPowerRuleDifferentiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_xToThe1(self):
+        xToThe1 = powAST(self.variableX, numberAST(1))
+        xToThe1_prime = xToThe1._diff()
+
+        self.assertTrue(isinstance(xToThe1_prime, multAST))
+
+        self.assertTrue(isinstance(xToThe1_prime.value0, numberAST))
+        self.assertEqual(xToThe1_prime.value0.value0, 1)
+
+        self.assertTrue(isinstance(xToThe1_prime.value1, powAST))
+
+        self.assertTrue(isinstance(xToThe1_prime.value1.value0, variableAST))
+        self.assertEqual(xToThe1_prime.value1.value0.value0, "x")
+
+        self.assertTrue(isinstance(xToThe1_prime.value1.value1, subAST))
+
+        self.assertTrue(isinstance(xToThe1_prime.value1.value1.value0, numberAST))
+        self.assertEqual(xToThe1_prime.value1.value1.value0.value0, 1)
+
+        self.assertTrue(isinstance(xToThe1_prime.value1.value1.value1, numberAST))
+        self.assertEqual(xToThe1_prime.value1.value1.value1.value0, 1)
+
+
+    def test_xToTheEuler(self):
+        xToTheEuler = powAST(self.variableX, eulerAST())
+        xToTheEuler_prime = xToTheEuler._diff()
+
+        self.assertTrue(isinstance(xToTheEuler_prime, multAST))
+
+        self.assertTrue(isinstance(xToTheEuler_prime.value0, eulerAST))
+        
+        self.assertTrue(isinstance(xToTheEuler_prime.value1, powAST))
+
+        self.assertTrue(isinstance(xToTheEuler_prime.value1.value0, variableAST))
+        self.assertEqual(xToTheEuler_prime.value1.value0.value0, "x")
+
+        self.assertTrue(isinstance(xToTheEuler_prime.value1.value1, subAST))
+
+        self.assertTrue(isinstance(xToTheEuler_prime.value1.value1.value0, eulerAST))
+
+        self.assertTrue(isinstance(xToTheEuler_prime.value1.value1.value1, numberAST))
+        self.assertEqual(xToTheEuler_prime.value1.value1.value1.value0, 1)
 
 if __name__ == "__main__":
     unittest.main()

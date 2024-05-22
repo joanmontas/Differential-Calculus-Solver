@@ -220,9 +220,10 @@ class csc2AST(Ast):
 
     def _diff(self):
         if self.value0.__type__() == "variable":
-            return multAST(
-                negativeAST(numberAST(2)),
-                multAST(cosAST(self.value0), csc2AST(self.value0)),
+            return negativeAST(
+                multAST(
+                    numberAST(2), multAST(csc2AST(self.value0), cotAST(self.value0))
+                )
             )
         elif self.value0.__type__() == "number":
             return self
