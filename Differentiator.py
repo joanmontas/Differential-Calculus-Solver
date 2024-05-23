@@ -29,6 +29,25 @@ class Ast(metaclass=MetaAst):
         pass
 
 
+class expressionAST(Ast):
+    nodeType = "expression"
+
+    def __init__(self, val0):
+        if not isinstance(val0, Ast):
+            raise TypeError("Error: expressionAst expects an Ast as argument")
+        self.value0 = val0
+        self.value1 = None
+
+    def __str__(self):
+        return str(self.value0)
+
+    def __type__(self):
+        return self.nodeType
+
+    def _diff(self):
+        return self.value0._diff()
+
+
 class numberAST(Ast):
     nodeType = "number"
 

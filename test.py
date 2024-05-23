@@ -3,7 +3,7 @@
 # License under GNU General Public License v3.0
 
 import unittest
-from differentiate import *
+from Differentiator import *
 
 import unittest
 
@@ -268,7 +268,6 @@ class plainPowerRuleDifferentiation(unittest.TestCase):
         self.assertTrue(isinstance(xToThe1_prime.value1.value1.value1, numberAST))
         self.assertEqual(xToThe1_prime.value1.value1.value1.value0, 1)
 
-
     def test_xToTheEuler(self):
         xToTheEuler = powAST(self.variableX, eulerAST())
         xToTheEuler_prime = xToTheEuler._diff()
@@ -276,7 +275,7 @@ class plainPowerRuleDifferentiation(unittest.TestCase):
         self.assertTrue(isinstance(xToTheEuler_prime, multAST))
 
         self.assertTrue(isinstance(xToTheEuler_prime.value0, eulerAST))
-        
+
         self.assertTrue(isinstance(xToTheEuler_prime.value1, powAST))
 
         self.assertTrue(isinstance(xToTheEuler_prime.value1.value0, variableAST))
@@ -288,6 +287,7 @@ class plainPowerRuleDifferentiation(unittest.TestCase):
 
         self.assertTrue(isinstance(xToTheEuler_prime.value1.value1.value1, numberAST))
         self.assertEqual(xToTheEuler_prime.value1.value1.value1.value0, 1)
+
 
 if __name__ == "__main__":
     unittest.main()

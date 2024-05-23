@@ -1,0 +1,7 @@
+# Copyright Joan Montas
+# All rights reserved.
+# License under GNU General Public License v3.0
+
+# python3.9
+# unittest
+ply==3.11
