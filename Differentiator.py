@@ -134,6 +134,8 @@ class tanAST(Ast):
 
 
 class sec2AST(Ast):
+    # TODO(Joan) There is nothing special with sec2... simply apply power to better generalize - Joan
+
     nodeType = "sec2"
 
     def __init__(self, val0):
@@ -225,6 +227,8 @@ class cotAST(Ast):
 
 
 class csc2AST(Ast):
+    # TODO(Joan) There is nothing special with csc2... simply apply power to better generalize - Joan
+
     nodeType = "csc2"
 
     def __init__(self, val0):
@@ -369,8 +373,9 @@ class negativeAST(Ast):
         return self.nodeType
 
     def _diff(self):
-        if self.value0.__type__() == "variable":
-            return negativeAST(self.value0._diff())
+        # if self.value0.__type__() == "variable":
+        # return negativeAST(self.value0._diff())
+        return self.value0._diff()
 
 
 class variableAST(Ast):

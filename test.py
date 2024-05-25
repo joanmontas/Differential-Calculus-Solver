@@ -289,5 +289,14 @@ class plainPowerRuleDifferentiation(unittest.TestCase):
         self.assertEqual(xToTheEuler_prime.value1.value1.value1.value0, 1)
 
 
+class syntaxOfNumber(unittest.TestCase):
+    # TODO(Joan) test - Joan
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_number1(self):
+        self.assertTrue(True)
+
+
 if __name__ == "__main__":
     unittest.main()

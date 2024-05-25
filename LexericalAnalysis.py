@@ -7,7 +7,18 @@ from ply import lex
 
 class LexicalAnalyzer:
     def __init__(self):
-        self.functions = {"sin": "SIN", "cos": "COS", "tan": "TAN"}
+        self.functions = {
+            "sin": "SIN",
+            "cos": "COS",
+            "tan": "TAN",
+            "sec": "SEC",
+            "csc": "CSC",
+            "cot": "COT",
+            "arcsine": "ARCSINE",
+            "arccosine": "ARCCOSINE",
+            "sec2": "SEC2",
+            "csc2": "CSC2",
+        }
         self.constant = {"e": "EULER"}
 
         self.tokens = (

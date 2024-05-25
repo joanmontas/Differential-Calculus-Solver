@@ -36,10 +36,10 @@ class SyntacticAnalyzer:
         self.parser = yacc.yacc(module=self)
 
     def p_expression(self, p):
-        """expression : terminal
-        | binary
+        """expression : group
         | unary
-        | group
+        | binary
+        | terminal
         """
 
         p[0] = p[1]
@@ -74,6 +74,7 @@ class SyntacticAnalyzer:
         | expression TIMES expression
         | expression DIVIDE expression
         | expression POWER expression"""
+        # NOTE() Add more binary operation as needed
         if p[2] == "+":
             p[0] = addAST(p[1], p[3])
         elif p[2] == "-":
@@ -89,15 +90,17 @@ class SyntacticAnalyzer:
             yacc.errok
 
     def p_unary(self, p):
-        '''unary : MINUS expression %prec UMINUS'''
+        """unary : MINUS expression %prec UMINUS"""
+        # NOTE() Add more unary operation as needed
+        print(f"negating = {p[2]}")
         p[0] = negativeAST(p[2])
 
     def p_group(self, p):
-        '''group : LPAREN expression RPAREN'''
+        """group : LPAREN expression RPAREN"""
         p[0] = p[2]
 
     def p_function(self, p):
-        '''function : FUNCTION group'''
+        """function : FUNCTION group"""
         # NOTE() Add more function as needed
         if p[1] == "sin":
             p[0] = sinAST(p[2])
@@ -105,6 +108,22 @@ class SyntacticAnalyzer:
             p[0] = cosAST(p[2])
         elif p[1] == "tan":
             p[0] = tanAST(p[2])
+        elif p[1] == "arcsine":
+            p[0] = arcsineAST(p[2])
+        elif p[1] == "arccosine":
+            p[0] = arccosineAST(p[2])
+        elif p[1] == "arctan":
+            p[0] = arctanAST(p[2])
+        elif p[1] == "sec":
+            p[0] = secAST(p[2])
+        elif p[1] == "csc":
+            p[0] = cscAST(p[2])
+        elif p[1] == "cot":
+            p[0] = cotAST(p[2])
+        elif p[1] == "csc2":
+            p[0] = csc2AST(p[2])
+        elif p[1] == "sec2":
+            p[0] = sec2AST(p[2])
         else:
             self.er = (
                 f"ERROR: Syntax error at token {p}, unkown function  of type {p[2]}"

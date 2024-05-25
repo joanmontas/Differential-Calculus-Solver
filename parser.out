@@ -10,10 +10,10 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> expression
-Rule 1     expression -> terminal
-Rule 2     expression -> binary
-Rule 3     expression -> unary
-Rule 4     expression -> group
+Rule 1     expression -> group
+Rule 2     expression -> unary
+Rule 3     expression -> binary
+Rule 4     expression -> terminal
 Rule 5     terminal -> variable
 Rule 6     terminal -> number
 Rule 7     terminal -> constant
@@ -51,14 +51,14 @@ error                :
 
 Nonterminals, with rules where they appear
 
-binary               : 2
+binary               : 3
 constant             : 7
 expression           : 12 12 13 13 14 14 15 15 16 16 17 18 0
 function             : 8
-group                : 4 19
+group                : 1 19
 number               : 6
-terminal             : 1
-unary                : 3
+terminal             : 4
+unary                : 2
 variable             : 5
 
 Parsing method: LALR
@@ -66,42 +66,42 @@ Parsing method: LALR
 state 0
 
     (0) S' -> . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 1
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 1
 
@@ -121,57 +121,137 @@ state 1
 
 state 2
 
-    (1) expression -> terminal .
+    (1) expression -> group .
 
-    PLUS            reduce using rule 1 (expression -> terminal .)
-    MINUS           reduce using rule 1 (expression -> terminal .)
-    TIMES           reduce using rule 1 (expression -> terminal .)
-    DIVIDE          reduce using rule 1 (expression -> terminal .)
-    POWER           reduce using rule 1 (expression -> terminal .)
-    $end            reduce using rule 1 (expression -> terminal .)
-    RPAREN          reduce using rule 1 (expression -> terminal .)
+    PLUS            reduce using rule 1 (expression -> group .)
+    MINUS           reduce using rule 1 (expression -> group .)
+    TIMES           reduce using rule 1 (expression -> group .)
+    DIVIDE          reduce using rule 1 (expression -> group .)
+    POWER           reduce using rule 1 (expression -> group .)
+    $end            reduce using rule 1 (expression -> group .)
+    RPAREN          reduce using rule 1 (expression -> group .)
 
 
 state 3
 
-    (2) expression -> binary .
+    (2) expression -> unary .
 
-    PLUS            reduce using rule 2 (expression -> binary .)
-    MINUS           reduce using rule 2 (expression -> binary .)
-    TIMES           reduce using rule 2 (expression -> binary .)
-    DIVIDE          reduce using rule 2 (expression -> binary .)
-    POWER           reduce using rule 2 (expression -> binary .)
-    $end            reduce using rule 2 (expression -> binary .)
-    RPAREN          reduce using rule 2 (expression -> binary .)
+    PLUS            reduce using rule 2 (expression -> unary .)
+    MINUS           reduce using rule 2 (expression -> unary .)
+    TIMES           reduce using rule 2 (expression -> unary .)
+    DIVIDE          reduce using rule 2 (expression -> unary .)
+    POWER           reduce using rule 2 (expression -> unary .)
+    $end            reduce using rule 2 (expression -> unary .)
+    RPAREN          reduce using rule 2 (expression -> unary .)
 
 
 state 4
 
-    (3) expression -> unary .
+    (3) expression -> binary .
 
-    PLUS            reduce using rule 3 (expression -> unary .)
-    MINUS           reduce using rule 3 (expression -> unary .)
-    TIMES           reduce using rule 3 (expression -> unary .)
-    DIVIDE          reduce using rule 3 (expression -> unary .)
-    POWER           reduce using rule 3 (expression -> unary .)
-    $end            reduce using rule 3 (expression -> unary .)
-    RPAREN          reduce using rule 3 (expression -> unary .)
+    PLUS            reduce using rule 3 (expression -> binary .)
+    MINUS           reduce using rule 3 (expression -> binary .)
+    TIMES           reduce using rule 3 (expression -> binary .)
+    DIVIDE          reduce using rule 3 (expression -> binary .)
+    POWER           reduce using rule 3 (expression -> binary .)
+    $end            reduce using rule 3 (expression -> binary .)
+    RPAREN          reduce using rule 3 (expression -> binary .)
 
 
 state 5
 
-    (4) expression -> group .
+    (4) expression -> terminal .
 
-    PLUS            reduce using rule 4 (expression -> group .)
-    MINUS           reduce using rule 4 (expression -> group .)
-    TIMES           reduce using rule 4 (expression -> group .)
-    DIVIDE          reduce using rule 4 (expression -> group .)
-    POWER           reduce using rule 4 (expression -> group .)
-    $end            reduce using rule 4 (expression -> group .)
-    RPAREN          reduce using rule 4 (expression -> group .)
+    PLUS            reduce using rule 4 (expression -> terminal .)
+    MINUS           reduce using rule 4 (expression -> terminal .)
+    TIMES           reduce using rule 4 (expression -> terminal .)
+    DIVIDE          reduce using rule 4 (expression -> terminal .)
+    POWER           reduce using rule 4 (expression -> terminal .)
+    $end            reduce using rule 4 (expression -> terminal .)
+    RPAREN          reduce using rule 4 (expression -> terminal .)
 
 
 state 6
+
+    (18) group -> LPAREN . expression RPAREN
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
+    (12) binary -> . expression PLUS expression
+    (13) binary -> . expression MINUS expression
+    (14) binary -> . expression TIMES expression
+    (15) binary -> . expression DIVIDE expression
+    (16) binary -> . expression POWER expression
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
+    (9) variable -> . VARIABLE
+    (10) number -> . NUMBER
+    (11) constant -> . CONSTANT
+    (19) function -> . FUNCTION group
+
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
+    VARIABLE        shift and go to state 12
+    NUMBER          shift and go to state 13
+    CONSTANT        shift and go to state 14
+    FUNCTION        shift and go to state 15
+
+    expression                     shift and go to state 21
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
+
+state 7
+
+    (17) unary -> MINUS . expression
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
+    (12) binary -> . expression PLUS expression
+    (13) binary -> . expression MINUS expression
+    (14) binary -> . expression TIMES expression
+    (15) binary -> . expression DIVIDE expression
+    (16) binary -> . expression POWER expression
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
+    (9) variable -> . VARIABLE
+    (10) number -> . NUMBER
+    (11) constant -> . CONSTANT
+    (19) function -> . FUNCTION group
+
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
+    VARIABLE        shift and go to state 12
+    NUMBER          shift and go to state 13
+    CONSTANT        shift and go to state 14
+    FUNCTION        shift and go to state 15
+
+    expression                     shift and go to state 22
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
+
+state 8
 
     (5) terminal -> variable .
 
@@ -184,7 +264,7 @@ state 6
     RPAREN          reduce using rule 5 (terminal -> variable .)
 
 
-state 7
+state 9
 
     (6) terminal -> number .
 
@@ -197,7 +277,7 @@ state 7
     RPAREN          reduce using rule 6 (terminal -> number .)
 
 
-state 8
+state 10
 
     (7) terminal -> constant .
 
@@ -210,7 +290,7 @@ state 8
     RPAREN          reduce using rule 7 (terminal -> constant .)
 
 
-state 9
+state 11
 
     (8) terminal -> function .
 
@@ -222,86 +302,6 @@ state 9
     $end            reduce using rule 8 (terminal -> function .)
     RPAREN          reduce using rule 8 (terminal -> function .)
 
-
-state 10
-
-    (17) unary -> MINUS . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
-    (12) binary -> . expression PLUS expression
-    (13) binary -> . expression MINUS expression
-    (14) binary -> . expression TIMES expression
-    (15) binary -> . expression DIVIDE expression
-    (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
-    (9) variable -> . VARIABLE
-    (10) number -> . NUMBER
-    (11) constant -> . CONSTANT
-    (19) function -> . FUNCTION group
-
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
-    VARIABLE        shift and go to state 12
-    NUMBER          shift and go to state 13
-    CONSTANT        shift and go to state 14
-    FUNCTION        shift and go to state 15
-
-    expression                     shift and go to state 21
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
-
-state 11
-
-    (18) group -> LPAREN . expression RPAREN
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
-    (12) binary -> . expression PLUS expression
-    (13) binary -> . expression MINUS expression
-    (14) binary -> . expression TIMES expression
-    (15) binary -> . expression DIVIDE expression
-    (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
-    (9) variable -> . VARIABLE
-    (10) number -> . NUMBER
-    (11) constant -> . CONSTANT
-    (19) function -> . FUNCTION group
-
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
-    VARIABLE        shift and go to state 12
-    NUMBER          shift and go to state 13
-    CONSTANT        shift and go to state 14
-    FUNCTION        shift and go to state 15
-
-    expression                     shift and go to state 22
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
 
 state 12
 
@@ -347,211 +347,228 @@ state 15
     (19) function -> FUNCTION . group
     (18) group -> . LPAREN expression RPAREN
 
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
 
     group                          shift and go to state 23
 
 state 16
 
     (12) binary -> expression PLUS . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 24
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 17
 
     (13) binary -> expression MINUS . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 25
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 18
 
     (14) binary -> expression TIMES . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 26
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 19
 
     (15) binary -> expression DIVIDE . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 27
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 20
 
     (16) binary -> expression POWER . expression
-    (1) expression -> . terminal
-    (2) expression -> . binary
-    (3) expression -> . unary
-    (4) expression -> . group
-    (5) terminal -> . variable
-    (6) terminal -> . number
-    (7) terminal -> . constant
-    (8) terminal -> . function
+    (1) expression -> . group
+    (2) expression -> . unary
+    (3) expression -> . binary
+    (4) expression -> . terminal
+    (18) group -> . LPAREN expression RPAREN
+    (17) unary -> . MINUS expression
     (12) binary -> . expression PLUS expression
     (13) binary -> . expression MINUS expression
     (14) binary -> . expression TIMES expression
     (15) binary -> . expression DIVIDE expression
     (16) binary -> . expression POWER expression
-    (17) unary -> . MINUS expression
-    (18) group -> . LPAREN expression RPAREN
+    (5) terminal -> . variable
+    (6) terminal -> . number
+    (7) terminal -> . constant
+    (8) terminal -> . function
     (9) variable -> . VARIABLE
     (10) number -> . NUMBER
     (11) constant -> . CONSTANT
     (19) function -> . FUNCTION group
 
-    MINUS           shift and go to state 10
-    LPAREN          shift and go to state 11
+    LPAREN          shift and go to state 6
+    MINUS           shift and go to state 7
     VARIABLE        shift and go to state 12
     NUMBER          shift and go to state 13
     CONSTANT        shift and go to state 14
     FUNCTION        shift and go to state 15
 
     expression                     shift and go to state 28
-    terminal                       shift and go to state 2
-    binary                         shift and go to state 3
-    unary                          shift and go to state 4
-    group                          shift and go to state 5
-    variable                       shift and go to state 6
-    number                         shift and go to state 7
-    constant                       shift and go to state 8
-    function                       shift and go to state 9
+    group                          shift and go to state 2
+    unary                          shift and go to state 3
+    binary                         shift and go to state 4
+    terminal                       shift and go to state 5
+    variable                       shift and go to state 8
+    number                         shift and go to state 9
+    constant                       shift and go to state 10
+    function                       shift and go to state 11
 
 state 21
+
+    (18) group -> LPAREN expression . RPAREN
+    (12) binary -> expression . PLUS expression
+    (13) binary -> expression . MINUS expression
+    (14) binary -> expression . TIMES expression
+    (15) binary -> expression . DIVIDE expression
+    (16) binary -> expression . POWER expression
+
+    RPAREN          shift and go to state 29
+    PLUS            shift and go to state 16
+    MINUS           shift and go to state 17
+    TIMES           shift and go to state 18
+    DIVIDE          shift and go to state 19
+    POWER           shift and go to state 20
+
+
+state 22
 
     (17) unary -> MINUS expression .
     (12) binary -> expression . PLUS expression
@@ -573,23 +590,6 @@ state 21
   ! TIMES           [ shift and go to state 18 ]
   ! DIVIDE          [ shift and go to state 19 ]
   ! POWER           [ shift and go to state 20 ]
-
-
-state 22
-
-    (18) group -> LPAREN expression . RPAREN
-    (12) binary -> expression . PLUS expression
-    (13) binary -> expression . MINUS expression
-    (14) binary -> expression . TIMES expression
-    (15) binary -> expression . DIVIDE expression
-    (16) binary -> expression . POWER expression
-
-    RPAREN          shift and go to state 29
-    PLUS            shift and go to state 16
-    MINUS           shift and go to state 17
-    TIMES           shift and go to state 18
-    DIVIDE          shift and go to state 19
-    POWER           shift and go to state 20
 
 
 state 23
