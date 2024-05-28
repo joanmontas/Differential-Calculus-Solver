@@ -64,7 +64,7 @@ class numberAST(Ast):
         return self.nodeType
 
     def _diff(self):
-        return "0"
+        return numberAST(0)
 
 
 class sinAST(Ast):
@@ -262,7 +262,7 @@ class arcsineAST(Ast):
         self.value1 = None
 
     def __str__(self):
-        return f"sin^-1({self.value0.__str__()})"
+        return f"arcsine({self.value0.__str__()})"
 
     def __type__(self):
         return self.nodeType
@@ -290,7 +290,7 @@ class arccosineAST(Ast):
         self.value1 = None
 
     def __str__(self):
-        return f"cos^-1({self.value0.__str__()})"
+        return f"arccosine({self.value0.__str__()})"
 
     def __type__(self):
         return self.nodeType
@@ -320,7 +320,7 @@ class arctanAST(Ast):
         self.value1 = None
 
     def __str__(self):
-        return f"tan^-1({self.value0.__str__()})"
+        return f"arctan({self.value0.__str__()})"
 
     def __type__(self):
         return self.nodeType
@@ -454,7 +454,6 @@ class multAST(Ast):
         # NOTE(Joan) This is more verbose (in terms of differentiation) but just as correct - Joan
         left = self.value0._diff()
         right = self.value1._diff()
-        print(left, right, self.value0, self.value1)
         return addAST(multAST(left, self.value1), multAST(right, self.value0))
 
 
@@ -528,7 +527,6 @@ class powAST(Ast):
                         return _chainRule(self)  # account for non-alg ^ alg
                 else:
                     return self  # account for non-alg ^ non-alg
-            pass
         else:
             if isAlgebraic(self.value1):
                 fPrime = self.value0._diff()

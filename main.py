@@ -13,6 +13,10 @@ if __name__ == "__main__":
     l = LexicalAnalyzer()
     s = SyntacticAnalyzer(l)
 
-    equation = "(-2)*sin(x)"
-    ast = s.parser.parse(equation, lexer=l.lexer)
-    # print(f"d/dx {ast} = {ast._diff()}")
+    equation0 = "2 + 3 * 4"
+    ast0 = s.parser.parse(equation0, lexer=l.lexer)
+    print(f"d/dx {ast0} = {ast0._diff()}")
+
+    equation1 = "(2 + 3) * 4"
+    ast1 = s.parser.parse(equation1, lexer=l.lexer)
+    print(f"d/dx {ast1} = {ast1._diff()}")

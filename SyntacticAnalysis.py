@@ -8,19 +8,30 @@ from Differentiator import *
 
 
 class SyntacticAnalyzer:
-    # TODO(Joan) Update grammar - Joan
-    # <expression>  ::= <terminal>
-    #                | '(' <expression> + <terminal> ')'
-    #                | '(' <expression> - <terminal> ')'
-    #                | '(' <expression> * <terminal> ')'
-    #                | '(' <expression> / <terminal> ')'
-    #                | '(' <expression> ^ <terminal> ')'
-    # <terminal>    ::= <number> | <constant> | <function> | <constant> | '-' terminal
-    # <number>      ::= d+
-    # <const>       ::= e
-    # <variable>    ::= [a-zA-Z]+
-    # <function>    ::= <functionName> '(' <expression> ')'
-    # <functionName>::= sin | cos | tan
+    # <expression> := group
+    #              | <unary>
+    #              | <binary>
+    #              | <terminal>
+
+    # <group>     := LPAREN <expression> RPAREN
+    #
+    # <unary>     := MINUS <expression>
+
+    # <binary>    := <expression> PLUS   <expression>
+    #              | <expression> MINUS  <expression>
+    #              | <expression> TIMES  <expression>
+    #              | <expression> DIVIDE <expression>
+    #              | <expression> POWER  <expression>
+    #
+    # <terminal>  := <variable>
+    #              | <number>
+    #              | <function>
+    #              | <constant>
+    #
+    # <variable>  := [a-zA-Z]+
+    # <number>    := d+
+    # <constant>  := sin | cos | tan | ...
+    # <function>  := <constant> group
 
     precedence = (
         ("left", "PLUS", "MINUS"),
@@ -92,7 +103,6 @@ class SyntacticAnalyzer:
     def p_unary(self, p):
         """unary : MINUS expression %prec UMINUS"""
         # NOTE() Add more unary operation as needed
-        print(f"negating = {p[2]}")
         p[0] = negativeAST(p[2])
 
     def p_group(self, p):
@@ -141,17 +151,6 @@ if __name__ == "__main__":
     l = LexicalAnalyzer()
     s = SyntacticAnalyzer(l)
 
-    # equation = "e"
-    # equation = "x"
-    # equation = "123"
-    equation = "123 - e + 2"
-    equation = "-2"
-    equation = "x ^ (-2)"
-    equation = "sin(-2)"
-    equation = "x ^ -2 + 2"
-    equation = "x ^ (-2 + 2)"
-    equation = "(x ^ -2) + 2"
-    equation = "cos(-2 + 2)"
     equation = "-4 * (-10)"
 
     ast = s.parser.parse(equation, lexer=l.lexer)

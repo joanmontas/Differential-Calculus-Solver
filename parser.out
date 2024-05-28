@@ -2,8 +2,16 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    ARCCOSINE
+    ARCSINE
+    ARCTAN
     COS
+    COT
+    CSC
+    CSC2
     EULER
+    SEC
+    SEC2
     SIN
     TAN
 
@@ -32,8 +40,14 @@ Rule 19    function -> FUNCTION group
 
 Terminals, with rules where they appear
 
+ARCCOSINE            : 
+ARCSINE              : 
+ARCTAN               : 
 CONSTANT             : 11
 COS                  : 
+COT                  : 
+CSC                  : 
+CSC2                 : 
 DIVIDE               : 15
 EULER                : 
 FUNCTION             : 19
@@ -43,6 +57,8 @@ NUMBER               : 10
 PLUS                 : 12
 POWER                : 16
 RPAREN               : 18
+SEC                  : 
+SEC2                 : 
 SIN                  : 
 TAN                  : 
 TIMES                : 14

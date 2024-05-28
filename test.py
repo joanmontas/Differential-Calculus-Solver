@@ -3,9 +3,10 @@
 # License under GNU General Public License v3.0
 
 import unittest
+import random
 from Differentiator import *
-
-import unittest
+from LexericalAnalysis import *
+from SyntacticAnalysis import *
 
 
 class variableX(unittest.TestCase):
@@ -289,13 +290,341 @@ class plainPowerRuleDifferentiation(unittest.TestCase):
         self.assertEqual(xToTheEuler_prime.value1.value1.value1.value0, 1)
 
 
-class syntaxOfNumber(unittest.TestCase):
-    # TODO(Joan) test - Joan
+class numberDifferetiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+    numberOfTest = 10
+
+    def test_postiveNumber(self):
+        for i in range(0, self.numberOfTest):
+            positiveNumber = random.randint(0, 9999999999)
+            numberX = numberAST(positiveNumber)
+            numberX_prime = numberX._diff()
+            self.assertTrue(isinstance(numberX_prime, numberAST))
+            self.assertEqual(numberX_prime.value0, 0)
+
+    # NOTE() Negative numbers are negativeAst(numberAst(positive_constant))
+
+
+class additionRuleDifferetiation(unittest.TestCase):
     variableConstant = "x"
     variableX = variableAST(variableConstant)
 
-    def test_number1(self):
-        self.assertTrue(True)
+    def test_cosX_plus_sinX(self):
+        cosX = cosAST(self.variableX)
+        sinX = sinAST(self.variableX)
+
+        cosXPlusSinX = addAST(cosX, sinX)
+
+        cosXPlusSinX_prime = cosXPlusSinX._diff()
+
+        self.assertTrue(isinstance(cosXPlusSinX_prime, addAST))
+
+        self.assertTrue(isinstance(cosXPlusSinX_prime.value0, negativeAST))
+        self.assertTrue(isinstance(cosXPlusSinX_prime.value0.value0, sinAST))
+
+        self.assertTrue(isinstance(cosXPlusSinX_prime.value1, cosAST))
+
+
+class substractionRuleDifferetiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_cosX_minus_sinX(self):
+        cosX = cosAST(self.variableX)
+        sinX = sinAST(self.variableX)
+
+        cosXMinusSinX = subAST(cosX, sinX)
+
+        cosXMinusSinX_prime = cosXMinusSinX._diff()
+
+        self.assertTrue(isinstance(cosXMinusSinX_prime, subAST))
+
+        self.assertTrue(isinstance(cosXMinusSinX_prime.value0, negativeAST))
+        self.assertTrue(isinstance(cosXMinusSinX_prime.value0.value0, sinAST))
+
+        self.assertTrue(isinstance(cosXMinusSinX_prime.value1, cosAST))
+
+
+class multiplicationRuleDifferetiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_cosX_time_sinX(self):
+        cosX = cosAST(self.variableX)
+        sinX = sinAST(self.variableX)
+
+        cosXMultSinX = multAST(cosX, sinX)
+
+        cosXMultSinX_prime = cosXMultSinX._diff()
+
+        self.assertTrue(isinstance(cosXMultSinX_prime, addAST))
+
+        self.assertTrue(isinstance(cosXMultSinX_prime.value0, multAST))
+        self.assertTrue(isinstance(cosXMultSinX_prime.value0.value0, negativeAST))
+        self.assertTrue(isinstance(cosXMultSinX_prime.value0.value0.value0, sinAST))
+        self.assertTrue(isinstance(cosXMultSinX_prime.value0.value1, sinAST))
+
+        self.assertTrue(isinstance(cosXMultSinX_prime.value1, multAST))
+        self.assertTrue(isinstance(cosXMultSinX_prime.value1.value0, cosAST))
+        self.assertTrue(isinstance(cosXMultSinX_prime.value1.value1, cosAST))
+
+
+class divisionRuleDifferetiation(unittest.TestCase):
+    variableConstant = "x"
+    variableX = variableAST(variableConstant)
+
+    def test_cosX_dividedBy_sinX(self):
+        cosX = cosAST(self.variableX)
+        sinX = sinAST(self.variableX)
+
+        cosXDivSinX = divAST(cosX, sinX)
+
+        cosXDivSinX_prime = cosXDivSinX._diff()
+
+        self.assertTrue(isinstance(cosXDivSinX_prime, divAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0, subAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value0, multAST))
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value0.value0, negativeAST))
+        self.assertTrue(
+            isinstance(cosXDivSinX_prime.value0.value0.value0.value0, sinAST)
+        )
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value0.value1, sinAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value1, multAST))
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value1.value0, cosAST))
+        self.assertTrue(isinstance(cosXDivSinX_prime.value0.value1.value1, cosAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value1, powAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value1.value0, sinAST))
+
+        self.assertTrue(isinstance(cosXDivSinX_prime.value1.value1, numberAST))
+        self.assertEqual(cosXDivSinX_prime.value1.value1.value0, 2)
+
+
+class syntaxNumber(unittest.TestCase):
+
+    def test_positiveNumber(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber = random.randint(0, 9999999999)
+
+        equation = str(positiveNumber)
+        ast = s.parser.parse(equation, lexer=l.lexer)
+        self.assertTrue(isinstance(ast, numberAST))
+        self.assertEqual(ast.value0, positiveNumber)
+
+    def test_negativeNumber(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber = random.randint(0, 9999999999)
+
+        equation = "-" + str(positiveNumber)
+        ast = s.parser.parse(equation, lexer=l.lexer)
+        self.assertTrue(isinstance(ast, negativeAST))
+        self.assertTrue(isinstance(ast.value0, numberAST))
+        self.assertEqual(ast.value0.value0, positiveNumber)
+
+
+class syntaxArithmetic(unittest.TestCase):
+
+    def test_positivePositiveNumberAddition(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = str(positiveNumber0) + " + " + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, addAST))
+        self.assertTrue(isinstance(ast.value0, numberAST))
+        self.assertTrue(isinstance(ast.value1, numberAST))
+
+    def test_positiveNegativeNumberAddition(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = str(positiveNumber0) + "+ -" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, addAST))
+        self.assertTrue(isinstance(ast.value0, numberAST))
+        self.assertEqual(ast.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, negativeAST))
+        self.assertTrue(isinstance(ast.value1.value0, numberAST))
+        self.assertEqual(ast.value1.value0.value0, positiveNumber1)
+
+    def test_negativePositiveNumberAddition(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = "-" + str(positiveNumber0) + "+" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, addAST))
+
+        self.assertTrue(isinstance(ast.value0, negativeAST))
+        self.assertTrue(isinstance(ast.value0.value0, numberAST))
+        self.assertEqual(ast.value0.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, numberAST))
+        self.assertEqual(ast.value1.value0, positiveNumber1)
+
+    def test_negativeNegativeNumberAddition(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = "-" + str(positiveNumber0) + "+ -" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, addAST))
+
+        self.assertTrue(isinstance(ast.value0, negativeAST))
+        self.assertTrue(isinstance(ast.value0.value0, numberAST))
+        self.assertEqual(ast.value0.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, negativeAST))
+        self.assertTrue(isinstance(ast.value1.value0, numberAST))
+        self.assertEqual(ast.value1.value0.value0, positiveNumber1)
+
+    def test_positivePositiveNumberSubstraction(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = str(positiveNumber0) + " - " + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, subAST))
+        self.assertTrue(isinstance(ast.value0, numberAST))
+        self.assertTrue(isinstance(ast.value1, numberAST))
+
+    def test_positiveNegativeNumberSubstraction(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = str(positiveNumber0) + "- -" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, subAST))
+        self.assertTrue(isinstance(ast.value0, numberAST))
+        self.assertEqual(ast.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, negativeAST))
+        self.assertTrue(isinstance(ast.value1.value0, numberAST))
+        self.assertEqual(ast.value1.value0.value0, positiveNumber1)
+
+    def test_negativePositiveNumberSubstraction(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = "-" + str(positiveNumber0) + "-" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, subAST))
+
+        self.assertTrue(isinstance(ast.value0, negativeAST))
+        self.assertTrue(isinstance(ast.value0.value0, numberAST))
+        self.assertEqual(ast.value0.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, numberAST))
+        self.assertEqual(ast.value1.value0, positiveNumber1)
+
+    def test_negativeNegativeNumberSubstraction(self):
+        l = LexicalAnalyzer()
+        s = SyntacticAnalyzer(l)
+
+        positiveNumber0 = random.randint(0, 9999999999)
+        positiveNumber1 = random.randint(0, 9999999999)
+
+        equation = "-" + str(positiveNumber0) + "- -" + str(positiveNumber1)
+
+        ast = s.parser.parse(equation, lexer=l.lexer)
+
+        self.assertTrue(isinstance(ast, subAST))
+
+        self.assertTrue(isinstance(ast.value0, negativeAST))
+        self.assertTrue(isinstance(ast.value0.value0, numberAST))
+        self.assertEqual(ast.value0.value0.value0, positiveNumber0)
+
+        self.assertTrue(isinstance(ast.value1, negativeAST))
+        self.assertTrue(isinstance(ast.value1.value0, numberAST))
+        self.assertEqual(ast.value1.value0.value0, positiveNumber1)
+
+    def test_allTerminalAndBinaryOperation(self):
+
+        # TODO(Joan) Add more terminals as needed - Joan
+        terminals = [
+            "sin(x)",
+            "cos(x)",
+            "tan(x)",
+            "sec(x)",
+            "csc(x)",
+            "cot(x)",
+            "arcsine(x)",
+            "arccosine(x)",
+            "arctan(x)",
+            "e",
+        ]
+
+        binary_operators = ["+", "-", "/", "*", "^"]
+        binary_operators_class_type = {
+            "+": addAST,
+            "-": subAST,
+            "/": divAST,
+            "*": multAST,
+            "^": powAST,
+        }
+
+        for i in terminals:
+            for j in terminals:
+                for k in binary_operators:
+                    l = LexicalAnalyzer()
+                    s = SyntacticAnalyzer(l)
+
+                    i_ast = s.parser.parse(i, lexer=l.lexer)
+                    j_ast = s.parser.parse(j, lexer=l.lexer)
+
+                    equation = f"{i} {k} {j}"
+
+                    ast = s.parser.parse(equation, lexer=l.lexer)
+
+                    self.assertTrue(isinstance(ast, binary_operators_class_type[k]))
+                    self.assertTrue(isinstance(ast.value0, type(i_ast)))
+                    self.assertTrue(isinstance(ast.value1, type(j_ast)))
+
 
 
 if __name__ == "__main__":

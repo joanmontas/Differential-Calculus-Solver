@@ -16,6 +16,7 @@ class LexicalAnalyzer:
             "cot": "COT",
             "arcsine": "ARCSINE",
             "arccosine": "ARCCOSINE",
+            "arctan": "ARCTAN",
             "sec2": "SEC2",
             "csc2": "CSC2",
         }
