@@ -52,3 +52,6 @@ Targeting the Derivative Calculus Domain
     # <number>    := d+
     # <constant>  := sin | cos | tan | ...
     # <function>  := <constant> group
+
+# Reference
+    https://www.eeweb.com/tools/calculus-derivatives-and-limits-reference-sheet/
