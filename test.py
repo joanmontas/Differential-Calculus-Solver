@@ -626,6 +626,5 @@ class syntaxArithmetic(unittest.TestCase):
                     self.assertTrue(isinstance(ast.value1, type(j_ast)))
 
 
-
 if __name__ == "__main__":
     unittest.main()

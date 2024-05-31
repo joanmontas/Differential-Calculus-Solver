@@ -45,6 +45,7 @@ class SyntacticAnalyzer:
         self.lex = lexer
         self.tokens = lexer.tokens
         self.parser = yacc.yacc(module=self)
+        self.errors = []
 
     def p_expression(self, p):
         """expression : group
@@ -143,7 +144,7 @@ class SyntacticAnalyzer:
     def p_error(self, p):
         # TODO(Joan) Handle error - Joan
         print("Syntax error at token", p)
-        self.er = f"Syntax error at token {p}"
+        self.er = f"Syntax error at token {p}. Unable to match to any rule"
         yacc.errok
 
 
