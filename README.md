@@ -11,21 +11,27 @@ Targeting the Derivative Calculus Domain
 6. **Quotient Rule**: $\frac{d}{dx}\left(\frac{f(x)}{g(x)}\right) = \frac{f'(x) \cdot g(x) - f(x) \cdot g'(x)}{(g(x))^2}$.
 
 ### Exponential and Logarithmic Functions:
-7. **Exponential Function**: $\frac{d}{dx}(e^x) = e^x$.
+7. **Exponential Function Euler Constant**: $\frac{d}{dx}(e^x) = e^x$.
 8. **Natural Logarithm**: $\frac{d}{dx}(\ln(x)) = \frac{1}{x}$.
 
 ### Trigonometric Functions:
 9. **Sine Function**: $\frac{d}{dx}(\sin(x)) = \cos(x)$.
 10. **Cosine Function**: $\frac{d}{dx}(\cos(x)) = -\sin(x)$.
 11. **Tangent Function**: $\frac{d}{dx}(\tan(x)) = \sec^2(x)$.
+12. **Secant Function**: $\frac{d}{dx}(\sec(x)) = \sec^2(x)\tan(x)$.
+13. **Cosecant Function**: $\frac{d}{dx}(\csc(x)) = -\csc(x)\cot(x)$.
+14. **Cotangent Function**: $\frac{d}{dx}(\cot(x)) = -\csc^2(x)$.
 
 ### Inverse Trigonometric Functions:
-12. **Arcsine Function**: $\frac{d}{dx}(\arcsin(x)) = \frac{1}{\sqrt{1-x^2}}$.
-13. **Arccosine Function**: $\frac{d}{dx}(\arccos(x)) = -\frac{1}{\sqrt{1-x^2}}$.
-14. **Arctangent Function**: $\frac{d}{dx}(\arctan(x)) = \frac{1}{1+x^2}$.
+15. **Arcsine Function**: $\frac{d}{dx}(\arcsin(x)) = \frac{1}{\sqrt{1-x^2}}$.
+16. **Arccosine Function**: $\frac{d}{dx}(\arccos(x)) = -\frac{1}{\sqrt{1-x^2}}$.
+17. **Arctangent Function**: $\frac{d}{dx}(\arctan(x)) = \frac{1}{1+x^2}$.
+
+### Inverse Trigonometric Functions:
+
 
 ### Chain Rule:
-15. **Chain Rule**: If $y = f(g(x))$, then $\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx}$, let $u = g(x)$.
+18. **Chain Rule**: If $y = f(g(x))$, then $\frac{dy}{dx} = \frac{dy}{du} \cdot \frac{du}{dx}$, let $u = g(x)$.
 
 # Grammar
     # <expression> := group

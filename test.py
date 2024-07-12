@@ -585,7 +585,7 @@ class syntaxArithmetic(unittest.TestCase):
 
     def test_allTerminalAndBinaryOperation(self):
 
-        # TODO(Joan) Add more terminals as needed - Joan
+        # NOTE(Joan) Add more terminals as needed - Joan
         terminals = [
             "sin(x)",
             "cos(x)",
