@@ -515,18 +515,15 @@ class powAST(Ast):
             if isinstance(self.value0, eulerAST):
                 if isinstance(self.value1, variableAST):
                     return self
-                else:
-                    return _chainRule(self)  # account for e^alg
+                return _chainRule(self)  # account for e^alg
             else:
                 if isAlgebraic(self.value1):
                     if isinstance(self.value1, variableAST):
                         return multAST(
                             powAST(self.value0, self.value1), naturalLogAST(self.value0)
                         )
-                    else:
-                        return _chainRule(self)  # account for non-alg ^ alg
-                else:
-                    return self  # account for non-alg ^ non-alg
+                    return _chainRule(self)  # account for non-alg ^ alg
+                return self  # account for non-alg ^ non-alg
         else:
             if isAlgebraic(self.value1):
                 fPrime = self.value0._diff()
@@ -544,14 +541,15 @@ class powAST(Ast):
                         self.value1,
                         powAST(self.value0, subAST(self.value1, numberAST(1))),
                     )
-                else:
-                    return _chainRule(self)  # alg ^ non-alg
+                return _chainRule(self)  # alg ^ non-alg
         raise NotImplementedError("Error: powAST condition not accounted for")
 
 
 # NOTE (Joan) Could simply implement this function inside the class - Joan
 # NOTE (Joan) Or simply abstract functions with single variable and double variable and group them - Joan
 def _chainRule(f):
+    g = f.value0
+    gPrime = g._diff()
     if isinstance(f, powAST):
         # TODO(Joan) account for all power condition - Joan
 
@@ -574,87 +572,60 @@ def _chainRule(f):
         else:
             # NOTE(Joan )alg ^ alg should never be reached. Logarithmic Differetiation is accounted at powAst._diff() - Joan
             if not isAlgebraic(f.value1):
-                g = f.value0
-                gPrime = g._diff()
                 fPrime = powAST(variableAST(variableConstant), f.value1)._diff()
                 fPrime.value1.value0 = g
                 return multAST(fPrime, gPrime)  # alg ^ non-alg
-    elif isinstance(f, sinAST):
-        g = f.value0
-        gPrime = g._diff()
+
+    if isinstance(f, sinAST):
         fPrime = sinAST(variableAST(variableConstant))._diff()
         fPrime.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, cosAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = cosAST(variableAST(variableConstant))._diff()
         fPrime.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, tanAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = tanAST(variableAST(variableConstant))._diff()
         fPrime.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, sec2AST):
-        print(f"f = {f} f0 = {f.value0}")
-        g = f.value0
-        gPrime = g._diff()
         fPrime = sec2AST(variableAST(variableConstant))._diff()
         fPrime.value1.value1.value0 = g
         fPrime.value1.value0.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, secAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = secAST(variableAST(variableConstant))._diff()
         fPrime.value1.value0 = g
         fPrime.value0.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, cscAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = cscAST(variableAST(variableConstant))._diff()
         fPrime.value0.value0.value0 = g
         fPrime.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, cotAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = cotAST(variableAST(variableConstant))._diff()
         print(fPrime)
         fPrime.value0.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, csc2AST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = csc2AST(variableAST(variableConstant))._diff()
         fPrime.value1.value0.value0 = g
         fPrime.value1.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, arcsineAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = arcsineAST(variableAST(variableConstant))._diff()
         fPrime.value1.value0.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, arccosineAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = arccosineAST(variableAST(variableConstant))._diff()
         fPrime.value0.value1.value0.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, arctanAST):
-        g = f.value0
-        gPrime = g._diff()
         fPrime = arctanAST(variableAST(variableConstant))._diff()
         fPrime.value1.value1.value0 = g
         return multAST(fPrime, gPrime)
     elif isinstance(f, naturalLogAST):
-        print(f"f = {f} f0 = {f.value0}")
-        g = f.value0
-        gPrime = g._diff()
         fPrime = naturalLogAST(variableAST(variableConstant))._diff()
         fPrime.value1 = g
         return multAST(fPrime, gPrime)
